@@ -3,7 +3,7 @@ services:
     name: wesal-staging
     runtime: node
     branch: staging
-    plan: starter
+    plan: 0.5c-512mb
     buildCommand: npm ci --omit=dev
     startCommand: bash deploy/render-start.sh
     healthCheckPath: /readyz
@@ -31,10 +31,10 @@ services:
           property: connectionString
   - type: keyvalue
     name: wesal-staging-cache
-    plan: starter
+    plan: 256mb
     ipAllowList: []
 
 databases:
   - name: wesal-staging-db
-    plan: basic-256mb
+    plan: 0.1c-256mb
     ipAllowList: []
