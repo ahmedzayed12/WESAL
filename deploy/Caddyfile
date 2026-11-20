@@ -1,0 +1,20 @@
+# Caddy يصدر شهادات HTTPS تلقائيًا من Let's Encrypt
+{$APP_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy app:3000 {
+		lb_policy least_conn
+		health_uri /readyz
+		health_interval 10s
+	}
+	request_body {
+		max_size 120MB
+	}
+}
+
+# بوابة عامة للتخزين (MinIO) لروابط الرفع والتنزيل الموقّعة
+{$MEDIA_DOMAIN} {
+	reverse_proxy minio:9000
+	request_body {
+		max_size 120MB
+	}
+}

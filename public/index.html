@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#5736c8">
+  <title>وصال | مساحتك للتواصل</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- شاشة الدخول والتسجيل -->
+  <section id="authView" class="auth" hidden>
+    <div class="auth-card card">
+      <div class="brand auth-brand"><span class="logo">و</span><div>وصال<small>مساحتك للتواصل</small></div></div>
+      <div class="auth-tabs">
+        <button class="nav active" data-authtab="login">تسجيل الدخول</button>
+        <button class="nav" data-authtab="register">حساب جديد</button>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <label>البريد الإلكتروني أو اسم المستخدم<input name="login" autocomplete="username" required></label>
+        <label>كلمة المرور<input name="password" type="password" autocomplete="current-password" required></label>
+        <button class="primary" type="submit">دخول</button>
+      </form>
+      <form id="registerForm" class="auth-form" hidden>
+        <label>الاسم<input name="name" maxlength="60" autocomplete="name" required></label>
+        <label>اسم المستخدم (حروف إنجليزية وأرقام و _)<input name="handle" pattern="[A-Za-z0-9_]{3,30}" dir="ltr" autocomplete="username" required></label>
+        <label>البريد الإلكتروني<input name="email" type="email" dir="ltr" autocomplete="email" required></label>
+        <label>كلمة المرور (8 أحرف على الأقل)<input name="password" type="password" minlength="8" autocomplete="new-password" required></label>
+        <button class="primary" type="submit">إنشاء الحساب</button>
+      </form>
+      <p id="authMessage" class="error-text" role="alert"></p>
+    </div>
+  </section>
+
+  <!-- التطبيق -->
+  <div id="appView" hidden>
+    <header class="top">
+      <div class="brand"><span class="logo">و</span><div>وصال<small>مساحتك للتواصل</small></div></div>
+      <input id="searchInput" class="search" type="search" placeholder="⌕  ابحث عن الأشخاص بالاسم أو @المعرّف" aria-label="بحث">
+      <div class="header-actions">
+        <button class="icon-btn" data-tab="notifications" title="الإشعارات">🔔<span id="notifBadge" class="badge" hidden></span></button>
+        <button class="icon-btn" data-profile="me" id="meButton" title="ملفي"></button>
+      </div>
+    </header>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="side-title">القائمة الرئيسية</div>
+        <button class="nav active" data-tab="feed">⌂ <span>الرئيسية</span></button>
+        <button class="nav" data-tab="explore">✦ <span>استكشاف</span></button>
+        <button class="nav" data-tab="reels">▣ <span>ريلز</span></button>
+        <button class="nav" data-tab="stories">◉ <span>القصص</span></button>
+        <button class="nav" data-tab="notifications">🔔 <span>الإشعارات</span></button>
+        <button class="nav" data-profile="me">👤 <span>ملفي</span></button>
+        <button class="nav" data-tab="admin" id="adminNav" hidden>🛡 <span>البلاغات</span></button>
+        <div class="separator"></div>
+        <h3>طلبات الصداقة</h3>
+        <div id="requests"></div>
+        <h3>طلبات المتابعة</h3>
+        <div id="followRequests"></div>
+        <h3>أشخاص قد تعرفهم</h3>
+        <div id="people"></div>
+      </aside>
+
+      <main>
+        <div id="storyStrip" class="story-strip"></div>
+        <section id="composer" class="composer card">
+          <div class="compose-title"><span id="composerAvatar"></span><div><strong>شارك ما يدور في بالك</strong><small>أفكارك ولحظاتك تستحق المشاركة</small></div></div>
+          <textarea id="postText" maxlength="5000" placeholder="بماذا تفكر اليوم؟"></textarea>
+          <div id="preview" class="preview"></div>
+          <div class="composer-tools">
+            <div class="upload-buttons">
+              <label class="upload-btn">▧ صورة <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden></label>
+              <label class="upload-btn">▣ فيديو <input id="videoInput" type="file" accept="video/mp4,video/webm" hidden></label>
+              <label class="upload-btn">▶ ريلز <input id="reelInput" type="file" accept="video/mp4,video/webm" hidden></label>
+              <label class="upload-btn">◉ قصة <input id="storyInput" type="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm" hidden></label>
+            </div>
+            <div class="publish-row">
+              <select id="audience" aria-label="الجمهور">
+                <option value="public">🌐 الجميع</option>
+                <option value="friends">👥 الأصدقاء</option>
+                <option value="followers">⭐ المتابعون</option>
+                <option value="friends_and_followers">الأصدقاء والمتابعون</option>
+                <option value="only_me">🔒 أنا فقط</option>
+              </select>
+              <button id="publish" class="primary">نشر الآن ←</button>
+            </div>
+          </div>
+          <div id="progress" class="progress" hidden><div></div></div>
+          <p id="uploadStatus" class="muted"></p>
+        </section>
+        <div class="section-heading"><h2 id="feedTitle">آخر المنشورات</h2><span id="feedHint"></span></div>
+        <div id="profileHeader"></div>
+        <div id="feed"></div>
+        <button id="loadMore" class="load-more" hidden>عرض المزيد</button>
+      </main>
+
+      <aside class="rightbar">
+        <div class="card side-card">
+          <h3>حسابي</h3>
+          <div id="myProfile" class="my-profile"></div>
+          <label class="upload-btn avatar-upload">📷 تغيير الصورة <input id="avatarInput" type="file" accept="image/png,image/jpeg,image/webp" hidden></label>
+          <label class="toggle"><input id="privateToggle" type="checkbox"> حساب خاص (تتطلب المتابعة موافقتك)</label>
+        </div>
+        <div class="card side-card">
+          <h3>أصدقائي</h3>
+          <div id="friends"></div>
+        </div>
+        <div class="card side-card">
+          <h3>الإعدادات</h3>
+          <div class="settings">
+            <button data-action="logout">تسجيل الخروج</button>
+            <button data-action="logout-all">الخروج من كل الأجهزة</button>
+            <button data-action="delete-account" class="danger">حذف الحساب نهائيًا</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script src="/app.js"></script>
+</body>
+</html>
